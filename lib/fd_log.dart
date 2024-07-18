@@ -35,33 +35,33 @@ class FDLog {
   ///
   /// Order by Number
   ///
-  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/ordered_color_code.png)
+  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/ordered_color_code.png)
   ///
   /// Order by Palette
   ///
-  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/256_color_palette.png)
+  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/256_color_palette.png)
   final int titleColorCode;
 
   /// color code for body log, default: 111
   ///
   /// Order by Number
   ///
-  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/ordered_color_code.png)
+  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/ordered_color_code.png)
   ///
   /// Order by Palette
   ///
-  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/256_color_palette.png)
+  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/256_color_palette.png)
   final int bodyColorCode;
 
   /// color for line/border, default: 244
   ///
   /// Order by Number
   ///
-  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/ordered_color_code.png)
+  /// ![Order by Number](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/ordered_color_code.png)
   ///
   /// Order by Palette
   ///
-  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/d_log/main/pic/256_color_palette.png)
+  /// ![Order by Palette](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/256_color_palette.png)
   final int lineColorCode;
 
   /// header of log, default: 'FDLog'
