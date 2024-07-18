@@ -52,7 +52,7 @@ final doc = await FirebaseFirestore.instance
 fdLog.firestoreDocument(doc);
 ```
 
-![result](pic/fd_log_console.png)
+![result](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/fd_log_console.png)
 
 ### Singleton
 
@@ -84,17 +84,17 @@ ElevatedButton(
 ),
 ```
 
-![getit](pic/getit.png)
+![getit](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/getit.png)
 
 ### Color Code:
 
 - Ordered
 
-  ![Ordered](pic/ordered_color_code.png)
+  ![Ordered](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/ordered_color_code.png)
 
 - Palette
 
-  ![Palette](pic/256_color_palette.png)
+  ![Palette](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/256_color_palette.png)
 
 ## Additional information
 
