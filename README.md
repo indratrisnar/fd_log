@@ -18,6 +18,10 @@ Flutter package for logging with some simple template and customization like to 
 
   Just like response http but for firestore document. If you want to check your response collection, just looping it then use this method. (If using firebase)
 
+- Disable Log
+
+  if your development proses has ended, you can disable log with just set enable as false. this feature better if you use singleton.
+
 ## Getting started
 
 - Add this package to your dependency
