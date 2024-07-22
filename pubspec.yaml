@@ -1,6 +1,6 @@
 name: fd_log
 description: "Flutter package for logging with some simple template and customization"
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/indratrisnar/fd_log
 
 environment:

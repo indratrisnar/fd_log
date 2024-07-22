@@ -1,3 +1,8 @@
+## 0.0.5
+
+- update information readme
+- remove plugin file
+
 ## 0.0.4
 
 - new property `useDebug`
