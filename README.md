@@ -1,4 +1,4 @@
-Flutter package for logging with some simple template and customization like to check response from api.
+Flutter package for logging with some simple template and customization like to check response from api. Better using [Singleton](#singleton)
 
 ## Features
 

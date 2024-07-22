@@ -1,3 +1,9 @@
+## 0.0.4
+
+- new property `useDebug`
+- remove firebase integration (cause error for project which is not using firebase)
+- restructure method
+
 ## 0.0.3
 
 - change asset image to network image

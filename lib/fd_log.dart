@@ -3,7 +3,7 @@ library fd_log;
 import 'dart:developer' as developer;
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 /// Log for your flow prosess
@@ -19,6 +19,7 @@ class FDLog {
     this.lineColorCode = 244,
     this.countMaxCharPerRow = true,
     this.enable = true,
+    this.useDebug = false,
   });
 
   static const String _resetColor = '\x1B[0m';
@@ -90,36 +91,53 @@ class FDLog {
   /// default: true
   final bool enable;
 
+  /// print to console using debugPrint from material package
+  ///
+  /// default: false
+  final bool useDebug;
+
+  _execute(List<String?> messages) {
+    for (String? e in messages) {
+      if (e == null) continue;
+      if (useDebug) {
+        debugPrint(e);
+      } else {
+        developer.log(e, name: prefix);
+      }
+    }
+  }
+
   String _ansiForegroundColor(int code) => '\x1B[38;5;${code}m';
 
-  void _topLine(int maxChar) {
+  String _topLine(int maxChar) {
     int newMaxCharPerRow = maxChar > maxCharPerRow ? maxCharPerRow : maxChar;
     String message = showVerticalLine
         ? '${_ansiForegroundColor(lineColorCode)}$_topLeftCorner${_dashLine * (newMaxCharPerRow + 2)}$_topRightCorner$_resetColor'
         : '${_ansiForegroundColor(lineColorCode)}${_dashLine * (newMaxCharPerRow + 2)}$_resetColor';
-    developer.log(message, name: prefix);
+    return message;
   }
 
-  void _middleLine(int maxChar) {
+  String _middleLine(int maxChar) {
     int newMaxCharPerRow = maxChar > maxCharPerRow ? maxCharPerRow : maxChar;
     String message = showVerticalLine
         ? '${_ansiForegroundColor(lineColorCode)}$_centerLeftCorner${_dashLine * (newMaxCharPerRow + 2)}$_centerRightCorner$_resetColor'
         : '${_ansiForegroundColor(lineColorCode)}${_dashLine * (newMaxCharPerRow + 2)}$_resetColor';
-    developer.log(message, name: prefix);
+    return message;
   }
 
-  void _bottomLine(int maxChar) {
+  String _bottomLine(int maxChar) {
     int newMaxCharPerRow = maxChar > maxCharPerRow ? maxCharPerRow : maxChar;
     String message = showVerticalLine
         ? '${_ansiForegroundColor(lineColorCode)}$_bottomLeftCorner${_dashLine * (newMaxCharPerRow + 2)}$_bottomRightCorner$_resetColor'
         : '${_ansiForegroundColor(lineColorCode)}${_dashLine * (newMaxCharPerRow + 2)}$_resetColor';
-    developer.log(message, name: prefix);
+    return message;
   }
 
-  void _wrapText(String text, int colorCode, int maxChar) {
+  List<String> _modifyRow(String text, int colorCode, int maxChar) {
     int newMaxCharPerRow = maxChar > maxCharPerRow ? maxCharPerRow : maxChar;
     final pattern = RegExp('.{1,$newMaxCharPerRow}');
-    pattern.allMatches(text).forEach((match) {
+
+    final textModified = pattern.allMatches(text).map((match) {
       String itemText = match.group(0) ?? '';
       String sentence = itemText.length < maxCharPerRow
           ? '$itemText${' ' * (newMaxCharPerRow - itemText.length)}'
@@ -127,8 +145,9 @@ class FDLog {
       String message = showVerticalLine
           ? '${_ansiForegroundColor(lineColorCode)}$_sideLine ${_ansiForegroundColor(colorCode)}$sentence$_resetColor ${_ansiForegroundColor(lineColorCode)}$_sideLine'
           : '${_ansiForegroundColor(colorCode)}$sentence$_resetColor';
-      developer.log(message, name: prefix);
-    });
+      return message;
+    }).toList();
+    return textModified;
   }
 
   /// basic log with border/side line
@@ -145,13 +164,15 @@ class FDLog {
     } else {
       maxChar = body.length;
     }
-    if (showHorizontalLine) _topLine(maxChar);
-    _wrapText(body, bodyColorCode, maxChar);
-    if (showHorizontalLine) _bottomLine(maxChar);
+    _execute([
+      if (showHorizontalLine) _topLine(maxChar),
+      ..._modifyRow(body, bodyColorCode, maxChar),
+      if (showHorizontalLine) _bottomLine(maxChar)
+    ]);
   }
 
   /// basic with title/header
-  void title(String title, String body) {
+  void title(String title, String body) async {
     if (!enable) return;
 
     int maxChar = 0;
@@ -170,11 +191,13 @@ class FDLog {
       maxChar = max(title.length, body.length);
     }
 
-    if (showHorizontalLine) _topLine(maxChar);
-    _wrapText(title, titleColorCode, maxChar);
-    if (showHorizontalLine) _middleLine(maxChar);
-    _wrapText(body, bodyColorCode, maxChar);
-    if (showHorizontalLine) _bottomLine(maxChar);
+    _execute([
+      if (showHorizontalLine) _topLine(maxChar),
+      ..._modifyRow(title, titleColorCode, maxChar),
+      if (showHorizontalLine) _middleLine(maxChar),
+      ..._modifyRow(body, bodyColorCode, maxChar),
+      if (showHorizontalLine) _bottomLine(maxChar),
+    ]);
   }
 
   /// response from http package
@@ -202,40 +225,13 @@ class FDLog {
     } else {
       maxChar = max(title.length, body.length);
     }
-    if (showHorizontalLine) _topLine(maxChar);
-    _wrapText(title, titleColorCode, maxChar);
-    if (showHorizontalLine) _middleLine(maxChar);
-    _wrapText(body, bodyColorCode, maxChar);
-    if (showHorizontalLine) _bottomLine(maxChar);
-  }
 
-  /// response from cloud firestore: document
-  void firestoreDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
-    if (!enable) return;
-
-    String path = doc.reference.path;
-    bool exists = doc.exists;
-    String id = doc.id;
-    Map<String, dynamic>? data = doc.data();
-
-    int maxChar = 0;
-    if (countMaxCharPerRow) {
-      maxChar = path.length;
-      maxChar = data
-          .toString()
-          .split('\n')
-          .map((e) => e.length)
-          .toList()
-          .fold(maxChar, (prev, e) => max(prev, e));
-    } else {
-      maxChar = max(data.toString().length, path.length);
-    }
-    if (showHorizontalLine) _topLine(maxChar);
-    _wrapText(path, titleColorCode, maxChar);
-    if (showHorizontalLine) _middleLine(maxChar);
-    _wrapText('Id: $id', bodyColorCode, maxChar);
-    _wrapText('Exists: $exists', bodyColorCode, maxChar);
-    _wrapText('Data: $data}', bodyColorCode, maxChar);
-    if (showHorizontalLine) _bottomLine(maxChar);
+    _execute([
+      if (showHorizontalLine) _topLine(maxChar),
+      ..._modifyRow(title, titleColorCode, maxChar),
+      if (showHorizontalLine) _middleLine(maxChar),
+      ..._modifyRow(body, bodyColorCode, maxChar),
+      if (showHorizontalLine) _bottomLine(maxChar),
+    ]);
   }
 }

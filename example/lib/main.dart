@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fd_log/fd_log.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -68,21 +67,6 @@ class TestFDLog extends StatelessWidget {
               dLog.response(response);
             },
             child: const Text('Response Http'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              try {
-                final doc = await FirebaseFirestore.instance
-                    .collection('Cars')
-                    .doc('jFIrKWrOCMNoWBcwUrgq')
-                    .get();
-                dLog.firestoreDocument(doc);
-              } catch (e) {
-                dLog.basic(e.toString());
-              }
-            },
-            child: const Text('Document Firestore'),
           ),
           const SizedBox(height: 20),
         ],
