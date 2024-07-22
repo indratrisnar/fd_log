@@ -1,3 +1,7 @@
+## 0.0.6
+
+- remove package cloud_firestore
+
 ## 0.0.5
 
 - update information readme
