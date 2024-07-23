@@ -22,7 +22,6 @@ Flutter package for logging with some simple template and customization like to 
 
 - Add this package to your dependency
 - Add [http](https://pub.dev/packages/http) pakage if you use
-- Add And Setup Your Firebase Project to use some method for check response from firestore
 
 ## Usage
 
@@ -40,12 +39,6 @@ fdLog.title(
 String url = 'https://jsonplaceholder.typicode.com/todos/1';
 final response = await http.get(Uri.parse(url));
 fdLog.response(response);
-
-final doc = await FirebaseFirestore.instance
-                    .collection('Cars')
-                    .doc('jFIrKWrOCMNoWBcwUrgq')
-                    .get();
-fdLog.firestoreDocument(doc);
 ```
 
 ![result](https://raw.githubusercontent.com/indratrisnar/fd_log/main/pic/fd_log_console.png)

@@ -1,3 +1,7 @@
+## 0.0.7
+
+- remove doc firebase
+
 ## 0.0.6
 
 - remove package cloud_firestore
