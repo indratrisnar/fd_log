@@ -1,3 +1,7 @@
+## 0.0.8
+
+- `maxRow` to set limit body to print
+
 ## 0.0.7
 
 - remove doc firebase

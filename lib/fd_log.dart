@@ -20,6 +20,7 @@ class FDLog {
     this.countMaxCharPerRow = true,
     this.enable = true,
     this.useDebug = false,
+    this.maxRow = 10,
   });
 
   static const String _resetColor = '\x1B[0m';
@@ -96,6 +97,11 @@ class FDLog {
   /// default: false
   final bool useDebug;
 
+  /// maximum row to print
+  ///
+  /// default: 10
+  final double maxRow;
+
   _execute(List<String?> messages) {
     for (String? e in messages) {
       if (e == null) continue;
@@ -137,7 +143,12 @@ class FDLog {
     int newMaxCharPerRow = maxChar > maxCharPerRow ? maxCharPerRow : maxChar;
     final pattern = RegExp('.{1,$newMaxCharPerRow}');
 
-    final textModified = pattern.allMatches(text).map((match) {
+    final textModified = <String>[];
+    int currentRow = 0;
+    for (var match in pattern.allMatches(text)) {
+      currentRow++;
+      if (currentRow > maxRow) break;
+
       String itemText = match.group(0) ?? '';
       String sentence = itemText.length < maxCharPerRow
           ? '$itemText${' ' * (newMaxCharPerRow - itemText.length)}'
@@ -145,8 +156,9 @@ class FDLog {
       String message = showVerticalLine
           ? '${_ansiForegroundColor(lineColorCode)}$_sideLine ${_ansiForegroundColor(colorCode)}$sentence$_resetColor ${_ansiForegroundColor(lineColorCode)}$_sideLine'
           : '${_ansiForegroundColor(colorCode)}$sentence$_resetColor';
-      return message;
-    }).toList();
+      textModified.add(message);
+    }
+
     return textModified;
   }
 
